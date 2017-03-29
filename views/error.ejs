@@ -1,0 +1,11 @@
+<%- include('header') %>
+<section>
+    <div class="container">
+        <div class="jumbotron">
+            <h1><%= message %></h1>
+            <h2><%= error.status %></h2>
+        </div>
+        <pre><%= error.stack %></pre>
+    </div>
+</section>
+<%- include('footer') %>

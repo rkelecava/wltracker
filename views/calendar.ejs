@@ -1,0 +1,1308 @@
+<!-- Calendar module -->
+<section ng-app="calendar" ng-controller="CalCtrl" ng-cloak>
+    <div class="container">
+        <!-- Month Scroller -->
+        <div class="row">
+            <div class="col-xs-1" style="text-align: center;"><a ng-click="changeMonth('backward')"><<</a></div>
+            <div class="col-xs-4" style="text-align: center;">{{currentDate | date:'LLLL yyyy'}}</div>
+            <div class="col-xs-1" style="text-align: center;"><a ng-click="changeMonth('forward')">>></a></div>
+        </div>
+        <br />
+        <!-- day of the week row for month view -->
+        <div class="row hidden-sm hidden-xs">
+            <div class="col-md-1 calendar-header">Sun</div>
+            <div class="col-md-1 calendar-header">Mon</div>
+            <div class="col-md-1 calendar-header">Tue</div>
+            <div class="col-md-1 calendar-header">Wed</div>
+            <div class="col-md-1 calendar-header">Thur</div>
+            <div class="col-md-1 calendar-header">Fri</div>
+            <div class="col-md-1 calendar-header">Sat</div>
+        </div>
+
+        <!-- calendar table -->
+        <!-- Row 1 -->
+        <div class="row">
+            <div class="col-md-1 calendar-cell {{calendar[0].style}}">
+                <h4>{{calendar[0].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[0].formFlag || calendar[0].style === 'calendar-disabled'" ng-click="calendar[0].formFlag = !calendar[0].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[0].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[0].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[0].formFlag = !calendar[0].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[0].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[0].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[0].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[0].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[0].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[0].total > 0"><strong>Total Calories</strong>: {{calendar[0].total}}</p>
+                    <p ng-show="checkObj(calendar[0].actualWeighin)"><strong>Actual weight</strong>: {{calendar[0].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[1].style}}">
+                <h4>{{calendar[1].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[1].formFlag || calendar[1].style === 'calendar-disabled'" ng-click="calendar[1].formFlag = !calendar[1].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[1].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[1].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[1].formFlag = !calendar[1].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[1].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[1].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[1].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[1].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[1].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[1].total > 0"><strong>Total Calories</strong>: {{calendar[1].total}}</p>
+                    <p ng-show="checkObj(calendar[1].actualWeighin)"><strong>Actual weight</strong>: {{calendar[1].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[2].style}}">
+                <h4>{{calendar[2].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[2].formFlag || calendar[2].style === 'calendar-disabled'" ng-click="calendar[2].formFlag = !calendar[2].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[2].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[2].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[2].formFlag = !calendar[2].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[2].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[2].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[2].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[2].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[2].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[2].total > 0"><strong>Total Calories</strong>: {{calendar[2].total}}</p>
+                    <p ng-show="checkObj(calendar[2].actualWeighin)"><strong>Actual weight</strong>: {{calendar[2].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[3].style}}">
+                <h4>{{calendar[3].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[3].formFlag || calendar[3].style === 'calendar-disabled'" ng-click="calendar[3].formFlag = !calendar[3].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[3].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[3].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[3].formFlag = !calendar[3].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[3].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[3].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[3].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[3].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[3].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[3].total > 0"><strong>Total Calories</strong>: {{calendar[3].total}}</p>
+                    <p ng-show="checkObj(calendar[3].actualWeighin)"><strong>Actual weight</strong>: {{calendar[3].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[4].style}}">
+                <h4>{{calendar[4].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[4].formFlag || calendar[4].style === 'calendar-disabled'" ng-click="calendar[4].formFlag = !calendar[4].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[4].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[4].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[4].formFlag = !calendar[4].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[4].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[4].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[4].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[4].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[4].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[4].total > 0"><strong>Total Calories</strong>: {{calendar[4].total}}</p>
+                    <p ng-show="checkObj(calendar[4].actualWeighin)"><strong>Actual weight</strong>: {{calendar[4].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[5].style}}">
+                <h4>{{calendar[5].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[5].formFlag || calendar[5].style === 'calendar-disabled'" ng-click="calendar[5].formFlag = !calendar[5].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[5].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[5].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[5].formFlag = !calendar[5].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[5].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[5].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[5].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[5].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[5].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[5].total > 0"><strong>Total Calories</strong>: {{calendar[5].total}}</p>
+                    <p ng-show="checkObj(calendar[5].actualWeighin)"><strong>Actual weight</strong>: {{calendar[5].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell calendar-cell-end {{calendar[6].style}}">
+                <h4>{{calendar[6].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[6].formFlag || calendar[6].style === 'calendar-disabled'" ng-click="calendar[6].formFlag = !calendar[6].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[6].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[6].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[6].formFlag = !calendar[6].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[6].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[6].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[6].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[6].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[6].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[6].total > 0"><strong>Total Calories</strong>: {{calendar[6].total}}</p>
+                    <p ng-show="checkObj(calendar[6].actualWeighin)"><strong>Actual weight</strong>: {{calendar[6].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+        </div>
+        <!-- /Row 1 -->
+        <!-- Row 2 -->
+        <div class="row">
+            <div class="col-md-1 calendar-cell {{calendar[7].style}}">
+                <h4>{{calendar[7].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[7].formFlag || calendar[7].style === 'calendar-disabled'" ng-click="calendar[7].formFlag = !calendar[7].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[7].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[7].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[7].formFlag = !calendar[7].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[7].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[7].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[7].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[7].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[7].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[7].total > 0"><strong>Total Calories</strong>: {{calendar[7].total}}</p>
+                    <p ng-show="checkObj(calendar[7].actualWeighin)"><strong>Actual weight</strong>: {{calendar[7].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[8].style}}">
+                <h4>{{calendar[8].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[8].formFlag || calendar[8].style === 'calendar-disabled'" ng-click="calendar[8].formFlag = !calendar[8].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[8].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[8].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[8].formFlag = !calendar[8].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[8].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[8].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[8].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[8].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[8].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[8].total > 0"><strong>Total Calories</strong>: {{calendar[8].total}}</p>
+                    <p ng-show="checkObj(calendar[8].actualWeighin)"><strong>Actual weight</strong>: {{calendar[8].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[9].style}}">
+                <h4>{{calendar[9].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[9].formFlag || calendar[9].style === 'calendar-disabled'" ng-click="calendar[9].formFlag = !calendar[9].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[9].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[9].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[9].formFlag = !calendar[9].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[9].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[9].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[9].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[9].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[9].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[9].total > 0"><strong>Total Calories</strong>: {{calendar[9].total}}</p>
+                    <p ng-show="checkObj(calendar[9].actualWeighin)"><strong>Actual weight</strong>: {{calendar[9].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[10].style}}">
+                <h4>{{calendar[10].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[10].formFlag || calendar[10].style === 'calendar-disabled'" ng-click="calendar[10].formFlag = !calendar[10].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[10].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[10].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[10].formFlag = !calendar[10].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[10].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[10].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[10].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[10].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[10].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[10].total > 0"><strong>Total Calories</strong>: {{calendar[10].total}}</p>
+                    <p ng-show="checkObj(calendar[10].actualWeighin)"><strong>Actual weight</strong>: {{calendar[10].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[11].style}}">
+                <h4>{{calendar[11].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[11].formFlag || calendar[11].style === 'calendar-disabled'" ng-click="calendar[11].formFlag = !calendar[11].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[11].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[11].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[11].formFlag = !calendar[11].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[11].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[11].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[11].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[11].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[11].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[11].total > 0"><strong>Total Calories</strong>: {{calendar[11].total}}</p>
+                    <p ng-show="checkObj(calendar[11].actualWeighin)"><strong>Actual weight</strong>: {{calendar[11].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[12].style}}">
+                <h4>{{calendar[12].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[12].formFlag || calendar[12].style === 'calendar-disabled'" ng-click="calendar[12].formFlag = !calendar[12].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[12].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[12].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[12].formFlag = !calendar[12].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[12].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[12].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[12].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[12].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[12].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[12].total > 0"><strong>Total Calories</strong>: {{calendar[12].total}}</p>
+                    <p ng-show="checkObj(calendar[12].actualWeighin)"><strong>Actual weight</strong>: {{calendar[12].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell calendar-cell-end {{calendar[13].style}}">
+                <h4>{{calendar[13].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[13].formFlag || calendar[13].style === 'calendar-disabled'" ng-click="calendar[13].formFlag = !calendar[13].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[13].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[13].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[13].formFlag = !calendar[13].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[13].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[13].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[13].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[13].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[13].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[13].total > 0"><strong>Total Calories</strong>: {{calendar[13].total}}</p>
+                    <p ng-show="checkObj(calendar[13].actualWeighin)"><strong>Actual weight</strong>: {{calendar[13].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+        </div>
+        <!-- /Row 2 -->
+        <!-- Row 3 -->
+        <div class="row">
+            <div class="col-md-1 calendar-cell {{calendar[14].style}}">
+                <h4>{{calendar[14].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[14].formFlag || calendar[14].style === 'calendar-disabled'" ng-click="calendar[14].formFlag = !calendar[14].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[14].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[14].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[14].formFlag = !calendar[14].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[14].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[14].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[14].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[14].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[14].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[14].total > 0"><strong>Total Calories</strong>: {{calendar[14].total}}</p>
+                    <p ng-show="checkObj(calendar[14].actualWeighin)"><strong>Actual weight</strong>: {{calendar[14].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[15].style}}">
+                <h4>{{calendar[15].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[15].formFlag || calendar[15].style === 'calendar-disabled'" ng-click="calendar[15].formFlag = !calendar[15].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[15].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[15].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[15].formFlag = !calendar[15].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[15].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[15].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[15].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[15].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[15].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[15].total > 0"><strong>Total Calories</strong>: {{calendar[15].total}}</p>
+                    <p ng-show="checkObj(calendar[15].actualWeighin)"><strong>Actual weight</strong>: {{calendar[15].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[16].style}}">
+                <h4>{{calendar[16].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[16].formFlag || calendar[16].style === 'calendar-disabled'" ng-click="calendar[16].formFlag = !calendar[16].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[16].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[16].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[16].formFlag = !calendar[16].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[16].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[16].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[16].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[16].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[16].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[16].total > 0"><strong>Total Calories</strong>: {{calendar[16].total}}</p>
+                    <p ng-show="checkObj(calendar[16].actualWeighin)"><strong>Actual weight</strong>: {{calendar[16].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[17].style}}">
+                <h4>{{calendar[17].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[17].formFlag || calendar[17].style === 'calendar-disabled'" ng-click="calendar[17].formFlag = !calendar[17].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[17].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[17].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[17].formFlag = !calendar[17].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[17].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[17].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[17].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[17].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[17].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[17].total > 0"><strong>Total Calories</strong>: {{calendar[17].total}}</p>
+                    <p ng-show="checkObj(calendar[17].actualWeighin)"><strong>Actual weight</strong>: {{calendar[17].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[18].style}}">
+                <h4>{{calendar[18].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[18].formFlag || calendar[18].style === 'calendar-disabled'" ng-click="calendar[18].formFlag = !calendar[18].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[18].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[18].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[18].formFlag = !calendar[18].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[18].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[18].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[18].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[18].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[18].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[18].total > 0"><strong>Total Calories</strong>: {{calendar[18].total}}</p>
+                    <p ng-show="checkObj(calendar[18].actualWeighin)"><strong>Actual weight</strong>: {{calendar[18].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[19].style}}">
+                <h4>{{calendar[19].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[19].formFlag || calendar[19].style === 'calendar-disabled'" ng-click="calendar[19].formFlag = !calendar[19].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[19].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[19].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[19].formFlag = !calendar[19].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[19].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[19].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[19].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[19].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[19].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[19].total > 0"><strong>Total Calories</strong>: {{calendar[19].total}}</p>
+                    <p ng-show="checkObj(calendar[19].actualWeighin)"><strong>Actual weight</strong>: {{calendar[19].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell calendar-cell-end {{calendar[20].style}}">
+                <h4>{{calendar[20].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[20].formFlag || calendar[20].style === 'calendar-disabled'" ng-click="calendar[20].formFlag = !calendar[20].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[20].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[20].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[20].formFlag = !calendar[20].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[20].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[20].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[20].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[20].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[20].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[20].total > 0"><strong>Total Calories</strong>: {{calendar[20].total}}</p>
+                    <p ng-show="checkObj(calendar[20].actualWeighin)"><strong>Actual weight</strong>: {{calendar[20].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+        </div>
+        <!-- /Row 3 -->
+        <!-- Row 4 -->
+        <div class="row">
+            <div class="col-md-1 calendar-cell {{calendar[21].style}}">
+                <h4>{{calendar[21].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[21].formFlag || calendar[21].style === 'calendar-disabled'" ng-click="calendar[21].formFlag = !calendar[21].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[21].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[21].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[21].formFlag = !calendar[21].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[21].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[21].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[21].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[21].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[21].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[21].total > 0"><strong>Total Calories</strong>: {{calendar[21].total}}</p>
+                    <p ng-show="checkObj(calendar[21].actualWeighin)"><strong>Actual weight</strong>: {{calendar[21].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[22].style}}">
+                <h4>{{calendar[22].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[22].formFlag || calendar[22].style === 'calendar-disabled'" ng-click="calendar[22].formFlag = !calendar[22].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[22].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[22].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[22].formFlag = !calendar[22].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[22].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[22].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[22].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[22].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[22].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[22].total > 0"><strong>Total Calories</strong>: {{calendar[22].total}}</p>
+                    <p ng-show="checkObj(calendar[22].actualWeighin)"><strong>Actual weight</strong>: {{calendar[22].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[23].style}}">
+                <h4>{{calendar[23].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[23].formFlag || calendar[23].style === 'calendar-disabled'" ng-click="calendar[23].formFlag = !calendar[23].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[23].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[23].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[23].formFlag = !calendar[23].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[23].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[23].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[23].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[23].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[23].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[23].total > 0"><strong>Total Calories</strong>: {{calendar[23].total}}</p>
+                    <p ng-show="checkObj(calendar[23].actualWeighin)"><strong>Actual weight</strong>: {{calendar[23].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[24].style}}">
+                <h4>{{calendar[24].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[24].formFlag || calendar[24].style === 'calendar-disabled'" ng-click="calendar[24].formFlag = !calendar[24].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[24].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[24].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[24].formFlag = !calendar[24].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[24].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[24].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[24].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[24].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[24].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[24].total > 0"><strong>Total Calories</strong>: {{calendar[24].total}}</p>
+                    <p ng-show="checkObj(calendar[24].actualWeighin)"><strong>Actual weight</strong>: {{calendar[24].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[25].style}}">
+                <h4>{{calendar[25].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[25].formFlag || calendar[25].style === 'calendar-disabled'" ng-click="calendar[25].formFlag = !calendar[25].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[25].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[25].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[25].formFlag = !calendar[25].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[25].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[25].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[25].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[25].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[25].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[25].total > 0"><strong>Total Calories</strong>: {{calendar[25].total}}</p>
+                    <p ng-show="checkObj(calendar[25].actualWeighin)"><strong>Actual weight</strong>: {{calendar[25].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[26].style}}">
+                <h4>{{calendar[26].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[26].formFlag || calendar[26].style === 'calendar-disabled'" ng-click="calendar[26].formFlag = !calendar[26].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[26].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[26].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[26].formFlag = !calendar[26].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[26].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[26].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[26].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[26].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[26].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[26].total > 0"><strong>Total Calories</strong>: {{calendar[26].total}}</p>
+                    <p ng-show="checkObj(calendar[26].actualWeighin)"><strong>Actual weight</strong>: {{calendar[26].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell calendar-cell-end {{calendar[27].style}}">
+                <h4>{{calendar[27].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[27].formFlag || calendar[27].style === 'calendar-disabled'" ng-click="calendar[27].formFlag = !calendar[27].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[27].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[27].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[27].formFlag = !calendar[27].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[27].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[27].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[27].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[27].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[27].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[27].total > 0"><strong>Total Calories</strong>: {{calendar[27].total}}</p>
+                    <p ng-show="checkObj(calendar[27].actualWeighin)"><strong>Actual weight</strong>: {{calendar[27].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+        </div>
+        <!-- /Row 4 -->
+        <!-- Row 5 -->
+        <div class="row">
+            <div class="col-md-1 calendar-cell {{calendar[28].style}}">
+                <h4>{{calendar[28].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[28].formFlag || calendar[28].style === 'calendar-disabled'" ng-click="calendar[28].formFlag = !calendar[28].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[28].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[28].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[28].formFlag = !calendar[28].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[28].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[28].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[28].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[28].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[28].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[28].total > 0"><strong>Total Calories</strong>: {{calendar[28].total}}</p>
+                    <p ng-show="checkObj(calendar[28].actualWeighin)"><strong>Actual weight</strong>: {{calendar[28].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[29].style}}">
+                <h4>{{calendar[29].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[29].formFlag || calendar[29].style === 'calendar-disabled'" ng-click="calendar[29].formFlag = !calendar[29].formFlag">Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[29].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[29].day}}<span style="float:right;margin-right: 5px;"><a class="btn" ng-click="calendar[29].formFlag = !calendar[29].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[29].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[29].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[29].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[29].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[29].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[29].total > 0"><strong>Total Calories</strong>: {{calendar[29].total}}</p>
+                    <p ng-show="checkObj(calendar[29].actualWeighin)"><strong>Actual weight</strong>: {{calendar[29].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[30].style}}">
+                <h4>{{calendar[30].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[30].formFlag || calendar[30].style === 'calendar-disabled'" ng-click="calendar[30].formFlag = !calendar[30].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[30].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[30].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[30].formFlag = !calendar[30].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[30].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[30].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[30].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[30].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[30].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[30].total > 0"><strong>Total Calories</strong>: {{calendar[30].total}}</p>
+                    <p ng-show="checkObj(calendar[30].actualWeighin)"><strong>Actual weight</strong>: {{calendar[30].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[31].style}}">
+                <h4>{{calendar[31].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[31].formFlag || calendar[31].style === 'calendar-disabled'" ng-click="calendar[31].formFlag = !calendar[31].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[31].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[31].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[31].formFlag = !calendar[31].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[31].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[31].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[31].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[31].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[31].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[31].total > 0"><strong>Total Calories</strong>: {{calendar[31].total}}</p>
+                    <p ng-show="checkObj(calendar[31].actualWeighin)"><strong>Actual weight</strong>: {{calendar[31].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[32].style}}">
+                <h4>{{calendar[32].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[32].formFlag || calendar[32].style === 'calendar-disabled'" ng-click="calendar[32].formFlag = !calendar[32].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[32].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[32].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[32].formFlag = !calendar[32].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[32].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[32].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[32].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[32].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[32].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[32].total > 0"><strong>Total Calories</strong>: {{calendar[32].total}}</p>
+                    <p ng-show="checkObj(calendar[32].actualWeighin)"><strong>Actual weight</strong>: {{calendar[32].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[33].style}}">
+                <h4>{{calendar[33].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[33].formFlag || calendar[33].style === 'calendar-disabled'" ng-click="calendar[33].formFlag = !calendar[33].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[33].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[33].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[33].formFlag = !calendar[33].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[33].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[33].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[33].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[33].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[33].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[33].total > 0"><strong>Total Calories</strong>: {{calendar[33].total}}</p>
+                    <p ng-show="checkObj(calendar[33].actualWeighin)"><strong>Actual weight</strong>: {{calendar[33].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell calendar-cell-end {{calendar[34].style}}">
+                <h4>{{calendar[34].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[34].formFlag || calendar[34].style === 'calendar-disabled'" ng-click="calendar[34].formFlag = !calendar[34].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[34].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[34].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[34].formFlag = !calendar[34].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[34].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[34].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[34].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[34].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[34].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[34].total > 0"><strong>Total Calories</strong>: {{calendar[34].total}}</p>
+                    <p ng-show="checkObj(calendar[34].actualWeighin)"><strong>Actual weight</strong>: {{calendar[34].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+        </div>
+        <!-- /Row 5 -->
+        <!-- Row 6 -->
+        <div class="row">
+            <div class="col-md-1 calendar-cell {{calendar[35].style}}">
+                <h4>{{calendar[35].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[35].formFlag || calendar[35].style === 'calendar-disabled'" ng-click="calendar[35].formFlag = !calendar[35].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[35].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[35].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[35].formFlag = !calendar[35].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[35].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[35].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[35].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[35].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[35].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[35].total > 0"><strong>Total Calories</strong>: {{calendar[35].total}}</p>
+                    <p ng-show="checkObj(calendar[35].actualWeighin)"><strong>Actual weight</strong>: {{calendar[35].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[36].style}}">
+                <h4>{{calendar[36].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[36].formFlag || calendar[36].style === 'calendar-disabled'" ng-click="calendar[36].formFlag = !calendar[36].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[36].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[36].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[36].formFlag = !calendar[36].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[36].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[36].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[36].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[36].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[36].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[36].total > 0"><strong>Total Calories</strong>: {{calendar[36].total}}</p>
+                    <p ng-show="checkObj(calendar[36].actualWeighin)"><strong>Actual weight</strong>: {{calendar[36].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[37].style}}">
+                <h4>{{calendar[37].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[37].formFlag || calendar[37].style === 'calendar-disabled'" ng-click="calendar[37].formFlag = !calendar[37].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[37].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[37].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[37].formFlag = !calendar[37].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[37].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[37].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[37].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[37].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[37].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[37].total > 0"><strong>Total Calories</strong>: {{calendar[37].total}}</p>
+                    <p ng-show="checkObj(calendar[37].actualWeighin)"><strong>Actual weight</strong>: {{calendar[37].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[38].style}}">
+                <h4>{{calendar[38].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[38].formFlag || calendar[38].style === 'calendar-disabled'" ng-click="calendar[38].formFlag = !calendar[38].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[38].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[38].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[38].formFlag = !calendar[38].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[38].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[38].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[38].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[38].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[38].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[38].total > 0"><strong>Total Calories</strong>: {{calendar[38].total}}</p>
+                    <p ng-show="checkObj(calendar[38].actualWeighin)"><strong>Actual weight</strong>: {{calendar[38].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[39].style}}">
+                <h4>{{calendar[39].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[39].formFlag || calendar[39].style === 'calendar-disabled'" ng-click="calendar[39].formFlag = !calendar[39].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[39].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[39].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[39].formFlag = !calendar[39].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[39].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[39].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[39].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[39].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[39].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[39].total > 0"><strong>Total Calories</strong>: {{calendar[39].total}}</p>
+                    <p ng-show="checkObj(calendar[39].actualWeighin)"><strong>Actual weight</strong>: {{calendar[39].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell {{calendar[40].style}}">
+                <h4>{{calendar[40].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[40].formFlag || calendar[40].style === 'calendar-disabled'" ng-click="calendar[40].formFlag = !calendar[40].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[40].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[40].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[40].formFlag = !calendar[40].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[40].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[40].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[40].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[40].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[40].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[40].total > 0"><strong>Total Calories</strong>: {{calendar[40].total}}</p>
+                    <p ng-show="checkObj(calendar[40].actualWeighin)"><strong>Actual weight</strong>: {{calendar[40].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+            <div class="col-md-1 calendar-cell calendar-cell-end {{calendar[41].style}}">
+                <h4>{{calendar[41].day}}</h4>
+                <button class="btn btn-default" ng-hide="calendar[41].formFlag || calendar[41].style === 'calendar-disabled'" ng-click="calendar[41].formFlag = !calendar[41].formFlag">
+                    Add <span class="glyphicon glyphicon-plus-sign"></span></button>
+                <div class="overlay-box" ng-show="calendar[41].formFlag">
+                    <form class="form-inline">
+                        <h5>Enter item for {{currentDate | date:'LLLL'}}, {{calendar[41].day}}<span style="float:right;margin-right: 5px;">
+                            <a class="btn" ng-click="calendar[41].formFlag = !calendar[41].formFlag">X</a></span></h5>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control-sm" id="description" ng-model="calendar[41].addDescription" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="text" class="form-control-sm" id="calories" ng-model="calendar[41].addCalories" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control-sm" id="weight" ng-model="calendar[41].addWeight" /> 
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="addItem(calendar[41].day)">Add</button>
+                    </form>
+                </div>
+                <br />
+                <div class="entries">
+                    <p ng-repeat="entry in calendar[41].entries"><a href="#" ng-click="deleteEntry(entry)">X</a> - <i>{{entry.description}} - {{entry.calories}}</i></p>
+                    <p ng-show="calendar[41].total > 0"><strong>Total Calories</strong>: {{calendar[41].total}}</p>
+                    <p ng-show="checkObj(calendar[41].actualWeighin)"><strong>Actual weight</strong>: {{calendar[41].actualWeighin.weight}} lbs</p>
+                </div>
+            </div>
+        </div>
+        <!-- /Row 6 -->
+    </div>
+</section>
+
+

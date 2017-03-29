@@ -1,0 +1,20 @@
+<%- include('header') %>
+    <section>
+      <div class="container">
+        <div class="page-header">
+          <h1><%= title %></h1>
+        </div>
+      </div>
+    </section>
+    <script>d="<%=date%>";</script>
+    <%- include('calendar') %>
+    <%- include('libraries') %>
+    <%- include('calendar_app') %>
+    <script>
+      function getPos(el) {
+        // yay readability
+        for (var lx=0, ly=0; el != null; lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
+          return {x: lx,y: ly};
+      }
+    </script>
+<%- include('footer') %>
